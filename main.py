@@ -1,39 +1,7 @@
 import numpy as np
+from search_util import cross_validation_naive as cross_validation
+import time
 
-
-def cross_validation(data,feature_list):
-
-    accuracy = 0
-    label    = data_array[:,0].astype(int)
-    feature  = data_array[:,feature_list]
-
-    # print(feature.shape)
-    num_pts = feature.shape[0]
-
-    correct = 0
-    for i in range(num_pts):
-        
-        feat_i = feature[i,:]
-        min_dis = np.inf
-        min_ind = -1
-        for j in range(num_pts):
-            if i == j: continue
-            dis_vec = feature[j,:] - feat_i
-            # this is the matrix multiplication between two vectors 
-            # equavelant to dis_vec*dis_vec' in Matlab
-            dis = dis_vec @ dis_vec 
-            if dis < min_dis: 
-                min_dis = dis
-                min_ind = j
-        
-        label_i = label[i]
-        label_j = label[min_ind]
-        correct +=  int(label_i==label_j)
-    
-    accuracy = correct/num_pts
-    # print(accuracy)
-
-    return accuracy
 
 def format_str(feature_list):
     set_str = "{"
@@ -78,7 +46,6 @@ def forward_search(data_array):
             best_feature_list = feature_list.copy()
     # 
     print("Finished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}".format(best_acc_overall))
-    print(best_feature_list)
 
 def backward_search(data_array):
 
@@ -112,16 +79,20 @@ def backward_search(data_array):
             best_feature_list = feature_list.copy()
     # 
     print("Finished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}".format(best_acc_overall))
-    print(best_feature_list) 
 
 
 if __name__ == "__main__":
-    data_file = "data/CS205_small_testdata__28.txt"
+    # data_file = "data/CS205_small_testdata__28.txt"
+    data_file = "data/CS205_large_testdata__1.txt"
     # feature_list = [2, 10, 9]
-
+    
+    
     data_array = np.loadtxt(data_file)
-    # forward_search(data_array)
-    backward_search(data_array)
+
+    start_time = time.time()
+    forward_search(data_array)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    # backward_search(data_array)
 
     
     
