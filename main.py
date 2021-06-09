@@ -47,19 +47,12 @@ def format_str(feature_list):
     set_str += "}"
     return set_str
 
-if __name__ == "__main__":
-    data_file = "data/CS205_small_testdata__10.txt"
-    # feature_list = [2, 10, 9]
+def forward_search(data_array):
 
-    # label    = data_array[:,0]
-    # feature  = data_array[:,1:]
-
-    data_array = np.loadtxt(data_file)
     num_pts, num_feat = data_array.shape
     num_feat -= 1 # the first column is the label, so number of feature -1
     print("This dataset has {:d} features (not including the class attribute), with {:d} instances.".format(num_feat, num_pts))
-    
-    
+
     feature_list = []
     print("Beginning search.")
     best_acc_overall = 0
@@ -86,3 +79,16 @@ if __name__ == "__main__":
     # 
     print("Finished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}".format(best_acc_overall))
     print(best_feature_list)
+
+def backward_search(data_array):
+    pass 
+
+if __name__ == "__main__":
+    data_file = "data/CS205_small_testdata__28.txt"
+    # feature_list = [2, 10, 9]
+
+    data_array = np.loadtxt(data_file)
+    forward_search(data_array)
+    
+    
+    
