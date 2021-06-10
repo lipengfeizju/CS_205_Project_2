@@ -1,10 +1,9 @@
-import numpy as np
 import time
-from search_utils import forward_search,backward_search
+from search_utils import forward_search,backward_search, load_data
 
 if __name__ == "__main__":
     data_file = "data/CS205_small_testdata__28.txt"
-    data_array = np.loadtxt(data_file)
+    data_array = load_data(data_file)
 
     start_time = time.time()
     print("-"*20 + "Forward Search" + "-"*20)

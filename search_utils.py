@@ -13,6 +13,19 @@ def format_str(feature_list):
     set_str += "}"
     return set_str
 
+def load_data(data_path):
+    data_array = np.loadtxt(data_path)
+
+    feat_array = data_array[:,1:]
+    # Normalization
+    row_mean = np.mean(feat_array, axis = 0)
+    feat_array = feat_array - row_mean.reshape([1,-1])
+    # row_std = np.std(feat_array, axis=1)
+    # feat_array = feat_array/row_std.reshape([-1,1])
+
+    data_array[:,1:] = feat_array
+    return data_array
+
 def forward_search(data_array):
 
     num_pts, num_feat = data_array.shape
