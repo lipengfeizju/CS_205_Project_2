@@ -1,5 +1,5 @@
 import numpy as np
-from search_util import cross_validation_naive as cross_validation
+from search_util import cross_validation_vectorize as cross_validation
 import time
 
 
@@ -7,7 +7,7 @@ def format_str(feature_list):
     set_str = "{"
     if len(feature_list) == 1:
         set_str += "{:d}".format(feature_list[0])
-    else: 
+    elif  len(feature_list) > 1:
         for fi in feature_list: 
             set_str += "{:d}, ".format(fi)
         set_str = set_str[:-2]
@@ -20,6 +20,9 @@ def forward_search(data_array):
     num_pts, num_feat = data_array.shape
     num_feat -= 1 # the first column is the label, so number of feature -1
     print("This dataset has {:d} features (not including the class attribute), with {:d} instances.".format(num_feat, num_pts))
+
+    all_acc = cross_validation(data_array,[i+1 for i in range(num_feat)])
+    print("Running nearest neighbor with all {:d} features, using “leaving-one-out” evaluation, I get an accuracy of {:.2f}%".format(num_feat, all_acc*100))
 
     feature_list = []
     print("Beginning search.")
@@ -45,7 +48,7 @@ def forward_search(data_array):
             best_acc_overall  = best_acc_level
             best_feature_list = feature_list.copy()
     # 
-    print("Finished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}".format(best_acc_overall))
+    print("Finished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}%".format(100*best_acc_overall))
 
 def backward_search(data_array):
 
@@ -53,12 +56,15 @@ def backward_search(data_array):
     num_feat -= 1 # the first column is the label, so number of feature -1
     print("This dataset has {:d} features (not including the class attribute), with {:d} instances.".format(num_feat, num_pts))
 
+    all_acc = cross_validation(data_array,[i+1 for i in range(num_feat)])
+    print("Running nearest neighbor with all {:d} features, using “leaving-one-out” evaluation, I get an accuracy of {:.2f}%".format(num_feat, all_acc*100))
+
     feature_list = [j for j in range(1,num_feat+1)]
     print("Beginning search.")
     best_acc_overall = 0
     best_feature_list = feature_list.copy()
     
-    for i in range(1,num_feat+1):
+    for i in range(1,num_feat):
         best_acc_level = 0
         best_j = -1
         for j in range(1,num_feat+1):
@@ -78,21 +84,21 @@ def backward_search(data_array):
             best_acc_overall  = best_acc_level
             best_feature_list = feature_list.copy()
     # 
-    print("Finished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}".format(best_acc_overall))
+    print("Finished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}%".format(100*best_acc_overall))
 
 
 if __name__ == "__main__":
-    # data_file = "data/CS205_small_testdata__28.txt"
-    data_file = "data/CS205_large_testdata__1.txt"
+    data_file = "data/CS205_small_testdata__28.txt"
+    # data_file = "data/CS205_large_testdata__6.txt"
     # feature_list = [2, 10, 9]
-    
     
     data_array = np.loadtxt(data_file)
 
     start_time = time.time()
     forward_search(data_array)
-    print("--- %s seconds ---" % (time.time() - start_time))
     # backward_search(data_array)
+    print("--- %s seconds ---" % (time.time() - start_time))
+
 
     
     
