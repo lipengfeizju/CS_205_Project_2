@@ -26,7 +26,7 @@ def load_data(data_path):
     data_array[:,1:] = feat_array
     return data_array
 
-def forward_search(data_array):
+def forward_search(data_array, truncate_level=0):
 
     num_pts, num_feat = data_array.shape
     num_feat -= 1 # the first column is the label, so number of feature -1
@@ -39,8 +39,8 @@ def forward_search(data_array):
     print("Beginning search.")
     best_acc_overall = 0
     best_feature_list = []
-    
-    for i in range(1,num_feat+1):
+    if truncate_level == 0: truncate_level = num_feat
+    for i in range(1,truncate_level+1):
         best_acc_level = 0
         best_j = -1
         for j in range(1,num_feat+1):
@@ -61,7 +61,7 @@ def forward_search(data_array):
     # 
     print("\nFinished search!! The best feature subset is "+ format_str(best_feature_list) + ", which has an accuracy of {:.2f}%".format(100*best_acc_overall))
 
-def backward_search(data_array):
+def backward_search(data_array, truncate_level=0):
 
     num_pts, num_feat = data_array.shape
     num_feat -= 1 # the first column is the label, so number of feature -1
@@ -75,7 +75,8 @@ def backward_search(data_array):
     best_acc_overall = 0
     best_feature_list = feature_list.copy()
     
-    for i in range(1,num_feat):
+    if truncate_level == 0: truncate_level = num_feat
+    for i in range(1,truncate_level):
         best_acc_level = 0
         best_j = -1
         for j in range(1,num_feat+1):
@@ -84,7 +85,7 @@ def backward_search(data_array):
             feature_list_new.remove(j)
             acc_j = cross_validation(data_array,feature_list_new)
             set_str = format_str(feature_list_new)
-            print("        Using feature(s) "+ set_str +" accuracy is {:.2f}%".format(100*acc_j))
+            # print("        Using feature(s) "+ set_str +" accuracy is {:.2f}%".format(100*acc_j))
             if acc_j > best_acc_level:
                 best_j = j 
                 best_acc_level = acc_j

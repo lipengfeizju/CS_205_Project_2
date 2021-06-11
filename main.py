@@ -19,7 +19,7 @@ if __name__ == "__main__":
     data_array = np.loadtxt(data_file)
     num_feat = data_array.shape[1]-1
     truncate_level = 0
-    if num_feat > 5:
+    if num_feat > 30:
         print("You have {:d} features (not including the class attribute), do you want early stop?".format(num_feat))
         t_level = input("If you want, please type in a positive integar, otherwise, just press enter and continue:")
         if t_level != '': 
@@ -30,9 +30,9 @@ if __name__ == "__main__":
     x = input()
     selected_method = int(x)
     if selected_method == 1:
-        forward_search(data_array)
+        forward_search(data_array,truncate_level)
     elif selected_method ==2 :
-        backward_search(data_array)
+        backward_search(data_array,truncate_level)
     else:
         print("Please input a valid method! (1 or 2)")
 
