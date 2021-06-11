@@ -85,7 +85,7 @@ def backward_search(data_array, truncate_level=0):
             feature_list_new.remove(j)
             acc_j = cross_validation(data_array,feature_list_new)
             set_str = format_str(feature_list_new)
-            # print("        Using feature(s) "+ set_str +" accuracy is {:.2f}%".format(100*acc_j))
+            print("        Using feature(s) "+ set_str +" accuracy is {:.2f}%".format(100*acc_j))
             if acc_j > best_acc_level:
                 best_j = j 
                 best_acc_level = acc_j
